@@ -1,7 +1,30 @@
 import 'package:flutter/material.dart';
+import 'package:online_store/pages/auth/login.dart';
 import 'package:online_store/pages/splash_screen/screen2.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-class Screen1 extends StatelessWidget {
+class Screen1 extends StatefulWidget {
+  @override
+  State<Screen1> createState() => _Screen1State();
+}
+
+class _Screen1State extends State<Screen1> {
+  late SharedPreferences prefs;
+  bool prefsReady = false;
+  Future<void> getSharedPref() async {
+    print("Getting prefs");
+    prefs = await SharedPreferences.getInstance();
+    print("prefs Ready");
+    prefsReady = true;
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getSharedPref();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -20,7 +43,10 @@ class Screen1 extends StatelessWidget {
               ),
             ),
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 25.0 , vertical: 10),
+              padding: const EdgeInsets.symmetric(
+                horizontal: 25.0,
+                vertical: 10,
+              ),
               child: Text(
                 "Amet minim mollit non deserunt ullamco est\n sit aliqua dolor do amet sint. Velit officia\n consequat duis enim velit mollit.",
                 style: TextStyle(
@@ -31,11 +57,11 @@ class Screen1 extends StatelessWidget {
                 textAlign: TextAlign.center,
               ),
             ),
-            SizedBox(height: 50,)
+            SizedBox(height: 50),
           ],
         ),
       ),
-      bottomNavigationBar:SizedBox(
+      bottomNavigationBar: SizedBox(
         height: 70,
         width: double.infinity,
         child: Padding(
@@ -43,22 +69,34 @@ class Screen1 extends StatelessWidget {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              SizedBox(width: 75,),
+              SizedBox(width: 75),
               Row(
                 children: [
-                  ImageIcon(AssetImage('assets/images/ovel.png') , size: 35,),
-                  ImageIcon(AssetImage('assets/images/circle.png') , size: 30,),
-                  ImageIcon(AssetImage('assets/images/circle.png') , size: 30,)
-
+                  ImageIcon(AssetImage('assets/images/ovel.png'), size: 35),
+                  ImageIcon(AssetImage('assets/images/circle.png'), size: 30),
+                  ImageIcon(AssetImage('assets/images/circle.png'), size: 30),
                 ],
               ),
-              TextButton(onPressed: (){
-                Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>Screen2()));
-              }, child: Text("Next" , style: TextStyle(fontSize: 18, fontFamily: "Montserrat-SemiBold", color: Color(0xFFEF5434)),))
+              TextButton(
+                onPressed: () {
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(builder: (context) => Screen2()),
+                  );
+                },
+                child: Text(
+                  "Next",
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontFamily: "Montserrat-SemiBold",
+                    color: Color(0xFFEF5434),
+                  ),
+                ),
+              ),
             ],
           ),
         ),
-      )
+      ),
     );
   }
 
@@ -92,7 +130,10 @@ class Screen1 extends StatelessWidget {
             ],
           ),
           TextButton(
-            onPressed: () {},
+            onPressed: () {
+              if (!prefsReady) return;
+              redirect();
+            },
             child: Text(
               "Skip",
               style: TextStyle(
@@ -104,6 +145,14 @@ class Screen1 extends StatelessWidget {
           ),
         ],
       ),
+    );
+  }
+
+  Future<void> redirect() async {
+    await prefs.setBool("first_login", true);
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(builder: (context) => LoginPage()),
     );
   }
 }
