@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:online_store/pages/auth/register.dart';
 import 'package:online_store/pages/forget_password/index.dart';
+import 'package:online_store/pages/get_started/index.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -98,7 +99,9 @@ class _LoginPageState extends State<LoginPage> {
                 ),
                 minimumSize: Size(double.infinity, 50),
               ),
-              onPressed: () {},
+              onPressed: () {
+                Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => GetStartedPage() ));
+              },
               child: Text(
                 "Login",
                 style: TextStyle(
