@@ -1,9 +1,12 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:online_store/pages/components/app_bar.dart';
 import 'package:online_store/pages/components/bottom_bar.dart';
+import 'package:online_store/pages/components/filter_bar.dart';
 import 'package:online_store/pages/components/product.dart';
+import 'package:online_store/pages/components/search_bar.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -13,6 +16,8 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+
+
   var categories = [
     {"image": AssetImage("assets/images/category1.png"), 'name': 'Beauty'},
     {"image": AssetImage("assets/images/category2.png"), 'name': 'Fashion'},
@@ -88,7 +93,12 @@ class _HomePageState extends State<HomePage> {
   ];
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setSystemUIOverlayStyle(
+      SystemUiOverlayStyle(systemNavigationBarColor: Colors.transparent),
+    );
     return Scaffold(
+
+      extendBody: true,
       appBar: buildAppBar(),
       body: Stack(
         children: [
@@ -102,11 +112,11 @@ class _HomePageState extends State<HomePage> {
             child: Column(
               children: [
                 //Search bar
-                searchBox(),
+                buildSearchBar(),
                 SizedBox(height: 15),
 
                 //Featured with filters
-                featuredSection(),
+                buildFilterBar("All Featured"),
                 SizedBox(height: 15),
 
                 //Categories
@@ -123,7 +133,7 @@ class _HomePageState extends State<HomePage> {
                 dealsOFTheDaySection(),
 
                 //Deal of the day Products
-                dealProductSection(),
+                dealProductSection(context),
 
                 //Special Offer
                 specialOfferSection(),
@@ -132,12 +142,12 @@ class _HomePageState extends State<HomePage> {
                 trendingSection(),
 
                 //Trending Products
-                trendingProductSection(),
+                trendingProductSection(context),
                 SizedBox(height: 10),
 
                 //New Arrivals
                 newArrivalSection(),
-                SizedBox(height: 20),
+                SizedBox(height: 90),
               ],
             ),
           ),
@@ -234,7 +244,9 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Stack trendingProductSection() {
+  Stack trendingProductSection(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
     return Stack(
       children: [
         SizedBox(
@@ -256,14 +268,15 @@ class _HomePageState extends State<HomePage> {
                 trendingProducts[i]['discount'] as int,
                 null,
                 null,
+                120
               );
             },
           ),
         ),
         if (trendingProducts.length > 2)
           Positioned(
-            top: 100,
-            left: 330,
+            top: screenHeight * 0.10, // 15% from top
+            left: screenWidth * 0.83, // 80% from left
             child: InkWell(
               onTap: () {},
               child: Container(
@@ -397,7 +410,9 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Stack dealProductSection() {
+  Stack dealProductSection(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
     return Stack(
       children: [
         SizedBox(
@@ -419,14 +434,15 @@ class _HomePageState extends State<HomePage> {
                 dealOfDay[i]['discount'] as int,
                 dealOfDay[i]['rating'] as double,
                 dealOfDay[i]['review'] as int,
+                120
               );
             },
           ),
         ),
         if (dealOfDay.length > 2)
           Positioned(
-            top: 130,
-            left: 330,
+            top: screenHeight * 0.12, // 15% from top
+            left: screenWidth * 0.83, // 80% from left
             child: InkWell(
               onTap: () {},
               child: Container(
@@ -523,7 +539,7 @@ class _HomePageState extends State<HomePage> {
 
   SizedBox dealsSection() {
     return SizedBox(
-      height: 210,
+      height: 180,
       child: ListView.builder(
         itemCount: deals.length,
         scrollDirection: Axis.horizontal,
@@ -531,8 +547,7 @@ class _HomePageState extends State<HomePage> {
           return Container(
             margin: EdgeInsets.symmetric(horizontal: 10),
             decoration: BoxDecoration(borderRadius: BorderRadius.circular(10)),
-            width: 350,
-            height: 200,
+            width: 300,
             child: Stack(
               children: [
                 SizedBox(
@@ -649,101 +664,4 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Padding featuredSection() {
-    return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          SizedBox(width: 5),
-          Text(
-            "All Featured",
-            style: TextStyle(fontFamily: "Montserrat-SemiBold", fontSize: 18),
-          ),
-          SizedBox(width: 102),
-          Container(
-            padding: EdgeInsets.symmetric(horizontal: 5, vertical: 2),
-            height: 24,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(5),
-              color: Color(0xFFFDFDFD),
-            ),
-            child: InkWell(
-              onTap: () {},
-              child: Row(
-                children: [
-                  Text(
-                    "Sort",
-                    style: TextStyle(
-                      fontFamily: "Montserrat-Regular",
-                      fontSize: 13,
-                    ),
-                  ),
-                  Transform.rotate(
-                    angle: 90 * pi / 180,
-                    child: Icon(
-                      Icons.compare_arrows_sharp,
-                      size: 17,
-                      color: Colors.black,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-          SizedBox(width: 10),
-
-          Container(
-            padding: EdgeInsets.symmetric(horizontal: 5, vertical: 2),
-            height: 24,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(5),
-              color: Color(0xFFFDFDFD),
-            ),
-            child: InkWell(
-              onTap: () {},
-              child: Row(
-                children: [
-                  Text(
-                    "Filter",
-                    style: TextStyle(
-                      fontFamily: "Montserrat-Regular",
-                      fontSize: 13,
-                    ),
-                  ),
-                  Icon(Icons.filter_list_alt, size: 17, color: Colors.black),
-                ],
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Padding searchBox() {
-    return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-
-      child: TextField(
-        decoration: InputDecoration(
-          contentPadding: EdgeInsets.symmetric(horizontal: 10),
-          prefixIcon: Icon(Icons.search),
-          suffixIcon: Icon(Icons.mic_none),
-          filled: true,
-          hintText: 'Search any Product',
-          hintStyle: TextStyle(
-            color: Color(0xFFBBBBBB),
-            fontFamily: "Montserrat-Regular",
-            fontSize: 14,
-          ),
-          fillColor: Color(0xFFFDFDFD),
-          border: OutlineInputBorder(
-            borderSide: BorderSide.none,
-            borderRadius: BorderRadius.circular(8),
-          ),
-        ),
-      ),
-    );
-  }
 }

@@ -10,6 +10,7 @@ Widget buildProduct(
   int discount,
   double? rating,
   int? reviews,
+  double image_height,
 ) {
   return Container(
     width: 150,
@@ -23,7 +24,7 @@ Widget buildProduct(
         //Image
         SizedBox(
           width: double.infinity,
-          height: 120,
+          height: image_height,
           child: ClipRRect(
             borderRadius: BorderRadius.circular(6),
             child: Image(image: image, fit: BoxFit.cover),
@@ -87,10 +88,7 @@ Widget buildProduct(
         if (rating != null && reviews != null)
           Padding(
             padding: const EdgeInsets.only(left: 5.0, top: 1),
-            child: buildStarRating(
-              rating,
-              reviews,
-            ),
+            child: buildStarRating(rating, reviews),
           ),
       ],
     ),

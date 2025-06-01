@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:online_store/pages/home/index.dart';
 
 class GetStartedPage extends StatelessWidget {
@@ -6,6 +7,9 @@ class GetStartedPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setSystemUIOverlayStyle(
+      SystemUiOverlayStyle(systemNavigationBarColor: Colors.black),
+    );
     return Scaffold(
       body: Stack(
         children: [

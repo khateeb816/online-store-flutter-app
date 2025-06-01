@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:online_store/pages/auth/login.dart';
 
 class RegisterPage extends StatefulWidget {
+  const RegisterPage({super.key});
+
   @override
   State<RegisterPage> createState() => _RegisterPageState();
 }
@@ -137,7 +139,7 @@ class _RegisterPageState extends State<RegisterPage> {
                 ),
               ),
             ),
-            SizedBox(height: 70),
+            SizedBox(height: 47),
             Center(
               child: Text(
                 "- OR Continue with -",
@@ -191,7 +193,7 @@ class _RegisterPageState extends State<RegisterPage> {
                 ),
               ],
             ),
-            SizedBox(height: 20),
+            SizedBox(height: 15),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -205,7 +207,7 @@ class _RegisterPageState extends State<RegisterPage> {
                 ),
                 TextButton(
                   onPressed: () {
-                    Navigator.push(
+                    Navigator.pushReplacement(
                       context,
                       MaterialPageRoute(builder: (context) => LoginPage()),
                     );

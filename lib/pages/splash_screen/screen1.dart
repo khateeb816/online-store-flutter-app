@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:online_store/pages/auth/login.dart';
 import 'package:online_store/pages/splash_screen/screen2.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -27,6 +28,9 @@ class _Screen1State extends State<Screen1> {
 
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setSystemUIOverlayStyle(
+      SystemUiOverlayStyle(systemNavigationBarColor: Colors.transparent),
+    );
     return Scaffold(
       appBar: buildAppBar(),
       body: Center(

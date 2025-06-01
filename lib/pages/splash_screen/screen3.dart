@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:online_store/pages/auth/login.dart';
-import 'package:online_store/pages/splash_screen/screen1.dart';
 import 'package:online_store/pages/splash_screen/screen2.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Screen3 extends StatefulWidget {
+  const Screen3({super.key});
+
   @override
   State<Screen3> createState() => _Screen3State();
 }
@@ -13,9 +15,7 @@ class _Screen3State extends State<Screen3> {
   late SharedPreferences prefs;
   bool prefsReady = false;
   Future<void> getSharedPref() async {
-    print("Getting prefs");
     prefs = await SharedPreferences.getInstance();
-    print("prefs Ready");
     prefsReady = true;
   }
 
@@ -28,6 +28,9 @@ class _Screen3State extends State<Screen3> {
 
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setSystemUIOverlayStyle(
+      SystemUiOverlayStyle(systemNavigationBarColor: Colors.transparent),
+    );
     return Scaffold(
       appBar: buildAppBar(),
       body: Center(

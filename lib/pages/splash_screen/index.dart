@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:online_store/pages/auth/login.dart';
 import 'package:online_store/pages/get_started/index.dart';
 import 'package:online_store/pages/splash_screen/screen1.dart';
@@ -49,7 +50,12 @@ class _SplashScreenState extends State<SplashScreen> {
 
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setSystemUIOverlayStyle(
+      SystemUiOverlayStyle(systemNavigationBarColor: Colors.transparent),
+    );
     return Scaffold(
+      backgroundColor: Colors.white,
+      extendBody: true,
       body: Center(
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
