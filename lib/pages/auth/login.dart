@@ -2,8 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:online_store/pages/auth/register.dart';
 import 'package:online_store/pages/forget_password/index.dart';
 import 'package:online_store/pages/get_started/index.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginPage extends StatefulWidget {
+  const LoginPage({super.key});
+
   @override
   State<LoginPage> createState() => _LoginPageState();
 }
@@ -12,6 +15,19 @@ class _LoginPageState extends State<LoginPage> {
   bool isPassword = true;
   var emailController = TextEditingController();
   var passwordController = TextEditingController();
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getSharedPref();
+  }
+  late SharedPreferences prefs;
+  bool prefsReady = false;
+  Future<void> getSharedPref() async {
+    prefs = await SharedPreferences.getInstance();
+    prefsReady = true;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -80,7 +96,9 @@ class _LoginPageState extends State<LoginPage> {
                 onPressed: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => ForgetPasswordPage()),
+                    MaterialPageRoute(
+                      builder: (context) => ForgetPasswordPage(),
+                    ),
                   );
                 },
                 child: Text(
@@ -100,7 +118,12 @@ class _LoginPageState extends State<LoginPage> {
                 minimumSize: Size(double.infinity, 50),
               ),
               onPressed: () {
-                Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => GetStartedPage() ));
+                if (!prefsReady) return;
+                prefs.setString("user_id", "1");
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(builder: (context) => GetStartedPage()),
+                );
               },
               child: Text(
                 "Login",

@@ -4,6 +4,8 @@ import 'package:online_store/pages/splash_screen/screen2.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Screen1 extends StatefulWidget {
+  const Screen1({super.key});
+
   @override
   State<Screen1> createState() => _Screen1State();
 }
@@ -12,9 +14,7 @@ class _Screen1State extends State<Screen1> {
   late SharedPreferences prefs;
   bool prefsReady = false;
   Future<void> getSharedPref() async {
-    print("Getting prefs");
     prefs = await SharedPreferences.getInstance();
-    print("prefs Ready");
     prefsReady = true;
   }
 

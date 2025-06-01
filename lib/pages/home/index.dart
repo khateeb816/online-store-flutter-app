@@ -1,8 +1,9 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:online_store/pages/components/appBar.dart';
-import 'package:online_store/pages/components/bottomBar.dart';
+import 'package:online_store/pages/components/app_bar.dart';
+import 'package:online_store/pages/components/bottom_bar.dart';
+import 'package:online_store/pages/components/product.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -25,6 +26,66 @@ class _HomePageState extends State<HomePage> {
     {"image": AssetImage("assets/images/deal1.png"), 'off': '60-70% OFF'},
     {"image": AssetImage("assets/images/deal1.png"), 'off': '30-40% OFF'},
   ];
+
+  var dealOfDay = [
+    {
+      "image": AssetImage("assets/images/product1.png"),
+      "name": "Women Printed Kurta",
+      "description": "Neque porro quisquam est qui dolorem ipsum quia",
+      "price": 1500,
+      "orignal_price": 2499,
+      "discount": 40,
+      "rating": 4.5,
+      "review": 56890,
+    },
+    {
+      "image": AssetImage("assets/images/product1.png"),
+      "name": "Women Printed Kurta",
+      "description": "Neque porro quisquam est qui dolorem ipsum quia",
+      "price": 1500,
+      "orignal_price": 2499,
+      "discount": 40,
+      "rating": 4.5,
+      "review": 56890,
+    },
+    {
+      "image": AssetImage("assets/images/product1.png"),
+      "name": "Women Printed Kurta",
+      "description": "Neque porro quisquam est qui dolorem ipsum quia",
+      "price": 1500,
+      "orignal_price": 2499,
+      "discount": 40,
+      "rating": 4.5,
+      "review": 56890,
+    },
+  ];
+
+  var trendingProducts = [
+    {
+      "image": AssetImage("assets/images/product1.png"),
+      "name": "Women Printed Kurta",
+      "description": "Neque porro quisquam est qui dolorem ipsum quia",
+      "price": 1500,
+      "orignal_price": 2499,
+      "discount": 40,
+    },
+    {
+      "image": AssetImage("assets/images/product1.png"),
+      "name": "Women Printed Kurta",
+      "description": "Neque porro quisquam est qui dolorem ipsum quia",
+      "price": 1500,
+      "orignal_price": 2499,
+      "discount": 40,
+    },
+    {
+      "image": AssetImage("assets/images/product1.png"),
+      "name": "Women Printed Kurta",
+      "description": "Neque porro quisquam est qui dolorem ipsum quia",
+      "price": 1500,
+      "orignal_price": 2499,
+      "discount": 40,
+    },
+  ];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -41,124 +102,135 @@ class _HomePageState extends State<HomePage> {
             child: Column(
               children: [
                 //Search bar
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                  child: searchBox(),
-                ),
+                searchBox(),
                 SizedBox(height: 15),
+
                 //Featured with filters
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                  child: featuredSection(),
-                ),
+                featuredSection(),
                 SizedBox(height: 15),
+
                 //Categories
                 categoriesSection(),
                 SizedBox(height: 15),
+
                 //Deals
                 dealsSection(),
+
                 //Navigation Dots
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Icon(Icons.circle, color: Color(0xFFDDDADA), size: 15),
-                    Icon(Icons.circle, color: Color(0xFFFDA2B2), size: 15),
-                    Icon(Icons.circle, color: Color(0xFFDDDADA), size: 15),
-                  ],
-                ),
+                dealsNavigationDotsSection(),
+
                 //Deals of the day
                 dealsOFTheDaySection(),
+
                 //Deal of the day Products
                 dealProductSection(),
+
                 //Special Offer
                 specialOfferSection(),
+
                 //Trending Products Title
                 trendingSection(),
+
                 //Trending Products
                 trendingProductSection(),
                 SizedBox(height: 10),
+
                 //New Arrivals
-                Container(
-                  margin: EdgeInsets.symmetric(horizontal: 10),
-                  width: double.infinity,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(6),
-                    color: Colors.white,
-                  ),
-                  child: Column(
-                    children: [
-                      SizedBox(
-                        width: double.infinity,
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(6),
-                          child: Image.asset(
-                            "assets/images/newarrival.png",
-                            fit: BoxFit.cover,
-                          ),
-                        ),
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text("New Arrivals" , style: TextStyle(
-                                  fontFamily: "Montserrat-SemiBold",
-                                  fontSize: 20,
-                                ),),
-                                Text("Summer’ 25 Collections" , style: TextStyle(
-                                  fontFamily: "Montserrat-Regular",
-                                  fontSize: 16,
-                                ),),
-                              ],
-                            ),
-                          ),
-                          InkWell(
-                            onTap: () => {},
-                            child: Container(
-                              margin: EdgeInsets.only(right: 10),
-                              padding: EdgeInsets.symmetric(
-                                horizontal: 10,
-                                vertical: 5,
-                              ),
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(5),
-                                color: Color(0xFFF63758),
-                              ),
-                              child: Row(
-                                children: [
-                                  Text(
-                                    "View all",
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 12,
-                                      fontFamily: "Montserrat-SemiBold",
-                                    ),
-                                  ),
-                                  Icon(
-                                    Icons.arrow_forward,
-                                    size: 20,
-                                    color: Colors.white,
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
-                SizedBox(height: 20,)
+                newArrivalSection(),
+                SizedBox(height: 20),
               ],
             ),
           ),
         ],
       ),
-      bottomNavigationBar: bottomBar(context),
+      bottomNavigationBar: bottomBar(context , "home"),
+    );
+  }
+
+  Row dealsNavigationDotsSection() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Icon(Icons.circle, color: Color(0xFFDDDADA), size: 15),
+        Icon(Icons.circle, color: Color(0xFFFDA2B2), size: 15),
+        Icon(Icons.circle, color: Color(0xFFDDDADA), size: 15),
+      ],
+    );
+  }
+
+  Container newArrivalSection() {
+    return Container(
+      margin: EdgeInsets.symmetric(horizontal: 10),
+      width: double.infinity,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(6),
+        color: Colors.white,
+      ),
+      child: Column(
+        children: [
+          SizedBox(
+            width: double.infinity,
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(6),
+              child: Image.asset(
+                "assets/images/newarrival.png",
+                fit: BoxFit.cover,
+              ),
+            ),
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      "New Arrivals",
+                      style: TextStyle(
+                        fontFamily: "Montserrat-SemiBold",
+                        fontSize: 20,
+                      ),
+                    ),
+                    Text(
+                      "Summer’ 25 Collections",
+                      style: TextStyle(
+                        fontFamily: "Montserrat-Regular",
+                        fontSize: 16,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              InkWell(
+                onTap: () => {},
+                child: Container(
+                  margin: EdgeInsets.only(right: 10),
+                  padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(5),
+                    color: Color(0xFFF63758),
+                  ),
+                  child: Row(
+                    children: [
+                      Text(
+                        "View all",
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 12,
+                          fontFamily: "Montserrat-SemiBold",
+                        ),
+                      ),
+                      Icon(Icons.arrow_forward, size: 20, color: Colors.white),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
     );
   }
 
@@ -173,111 +245,42 @@ class _HomePageState extends State<HomePage> {
               return SizedBox(width: 10);
             },
             scrollDirection: Axis.horizontal,
-            itemCount: 3,
+            itemCount: trendingProducts.length,
             itemBuilder: (c, i) {
-              return Container(
-                width: 150,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(6),
-                  color: Colors.white,
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    SizedBox(
-                      width: double.infinity,
-                      height: 120,
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(6),
-                        child: Image(
-                          image: AssetImage("assets/images/product1.png"),
-                          fit: BoxFit.cover,
-                        ),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(left: 5.0, top: 5),
-                      child: Text(
-                        "Women Printed Kurta",
-                        style: TextStyle(
-                          fontFamily: "Montserrat-SemiBold",
-                          fontSize: 12,
-                        ),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(left: 5.0, top: 4),
-                      child: Text(
-                        "Neque porro quisquam est qui dolorem ipsum quia",
-                        style: TextStyle(
-                          fontFamily: "Montserrat-Regular",
-                          fontSize: 10,
-                          color: Colors.black,
-                        ),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(left: 5.0, top: 2),
-                      child: Text(
-                        "₹1500",
-                        style: TextStyle(
-                          fontFamily: "Montserrat-SemiBold",
-                          fontSize: 12,
-                        ),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(left: 5.0, top: 1),
-                      child: Row(
-                        children: [
-                          Text(
-                            "₹2499",
-                            style: TextStyle(
-                              color: Color(0xFFBABABA),
-                              fontFamily: "Montserrat-Regular",
-                              fontSize: 10,
-                              decoration: TextDecoration.lineThrough,
-                              decorationThickness: 1.5,
-                            ),
-                          ),
-                          SizedBox(width: 5),
-                          Text(
-                            "40%Off",
-                            style: TextStyle(
-                              color: Colors.red,
-                              fontFamily: "Montserrat-Regular",
-                              fontSize: 10,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
+              return buildProduct(
+                trendingProducts[i]['image'] as AssetImage,
+                trendingProducts[i]['name'] as String,
+                trendingProducts[i]['description'] as String,
+                trendingProducts[i]['price'] as int,
+                trendingProducts[i]['orignal_price'] as int,
+                trendingProducts[i]['discount'] as int,
+                null,
+                null,
               );
             },
           ),
         ),
-        Positioned(
-          top: 100,
-          left: 330,
-          child: InkWell(
-            onTap: () {},
-            child: Container(
-              height: 50,
-              width: 50,
-              decoration: BoxDecoration(
-                color: Color(0xFFBABABA),
-                borderRadius: BorderRadius.circular(25),
-              ),
-              child: Icon(
-                Icons.arrow_forward_ios,
-                size: 20,
-                color: Colors.black,
+        if (trendingProducts.length > 2)
+          Positioned(
+            top: 100,
+            left: 330,
+            child: InkWell(
+              onTap: () {},
+              child: Container(
+                height: 50,
+                width: 50,
+                decoration: BoxDecoration(
+                  color: Color(0xFFBABABA),
+                  borderRadius: BorderRadius.circular(25),
+                ),
+                child: Icon(
+                  Icons.arrow_forward_ios,
+                  size: 20,
+                  color: Colors.black,
+                ),
               ),
             ),
           ),
-        ),
       ],
     );
   }
@@ -405,138 +408,42 @@ class _HomePageState extends State<HomePage> {
               return SizedBox(width: 10);
             },
             scrollDirection: Axis.horizontal,
-            itemCount: 3,
+            itemCount: dealOfDay.length,
             itemBuilder: (c, i) {
-              return Container(
-                width: 180,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(6),
-                  color: Colors.white,
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    SizedBox(
-                      width: double.infinity,
-                      height: 150,
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(6),
-                        child: Image(
-                          image: AssetImage("assets/images/product1.png"),
-                          fit: BoxFit.cover,
-                        ),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(left: 5.0, top: 5),
-                      child: Text(
-                        "Women Printed Kurta",
-                        style: TextStyle(
-                          fontFamily: "Montserrat-SemiBold",
-                          fontSize: 12,
-                        ),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(left: 5.0, top: 4),
-                      child: Text(
-                        "Neque porro quisquam est qui dolorem ipsum quia",
-                        style: TextStyle(
-                          fontFamily: "Montserrat-Regular",
-                          fontSize: 10,
-                          color: Colors.black,
-                        ),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(left: 5.0, top: 2),
-                      child: Text(
-                        "₹1500",
-                        style: TextStyle(
-                          fontFamily: "Montserrat-SemiBold",
-                          fontSize: 12,
-                        ),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(left: 5.0, top: 1),
-                      child: Row(
-                        children: [
-                          Text(
-                            "₹2499",
-                            style: TextStyle(
-                              color: Color(0xFFBABABA),
-                              fontFamily: "Montserrat-Regular",
-                              fontSize: 10,
-                              decoration: TextDecoration.lineThrough,
-                              decorationThickness: 1.5,
-                            ),
-                          ),
-                          SizedBox(width: 5),
-                          Text(
-                            "40%Off",
-                            style: TextStyle(
-                              color: Colors.red,
-                              fontFamily: "Montserrat-Regular",
-                              fontSize: 10,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(left: 5.0, top: 1),
-                      child: Row(
-                        children: [
-                          Icon(Icons.star, size: 15, color: Color(0xFFEBB210)),
-                          Icon(Icons.star, size: 15, color: Color(0xFFEBB210)),
-                          Icon(Icons.star, size: 15, color: Color(0xFFEBB210)),
-                          Icon(Icons.star, size: 15, color: Color(0xFFEBB210)),
-                          Icon(
-                            Icons.star_half,
-                            size: 15,
-                            color: Color(0xFFBABABA),
-                          ),
-
-                          SizedBox(width: 5),
-
-                          Text(
-                            "56890",
-                            style: TextStyle(
-                              fontFamily: "Montserrat-Regular",
-                              fontSize: 10,
-                              color: Color(0xFFBABABA),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
+              return buildProduct(
+                dealOfDay[i]['image'] as AssetImage,
+                dealOfDay[i]['name'] as String,
+                dealOfDay[i]['description'] as String,
+                dealOfDay[i]['price'] as int,
+                dealOfDay[i]['orignal_price'] as int,
+                dealOfDay[i]['discount'] as int,
+                dealOfDay[i]['rating'] as double,
+                dealOfDay[i]['review'] as int,
               );
             },
           ),
         ),
-        Positioned(
-          top: 130,
-          left: 330,
-          child: InkWell(
-            onTap: () {},
-            child: Container(
-              height: 50,
-              width: 50,
-              decoration: BoxDecoration(
-                color: Color(0xFFBABABA),
-                borderRadius: BorderRadius.circular(25),
-              ),
-              child: Icon(
-                Icons.arrow_forward_ios,
-                size: 20,
-                color: Colors.black,
+        if (dealOfDay.length > 2)
+          Positioned(
+            top: 130,
+            left: 330,
+            child: InkWell(
+              onTap: () {},
+              child: Container(
+                height: 50,
+                width: 50,
+                decoration: BoxDecoration(
+                  color: Color(0xFFBABABA),
+                  borderRadius: BorderRadius.circular(25),
+                ),
+                child: Icon(
+                  Icons.arrow_forward_ios,
+                  size: 20,
+                  color: Colors.black,
+                ),
               ),
             ),
           ),
-        ),
       ],
     );
   }
@@ -742,92 +649,99 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Row featuredSection() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.start,
-      children: [
-        SizedBox(width: 5),
-        Text(
-          "All Featured",
-          style: TextStyle(fontFamily: "Montserrat-SemiBold", fontSize: 18),
-        ),
-        SizedBox(width: 102),
-        Container(
-          padding: EdgeInsets.symmetric(horizontal: 5, vertical: 2),
-          height: 24,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(5),
-            color: Color(0xFFFDFDFD),
+  Padding featuredSection() {
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          SizedBox(width: 5),
+          Text(
+            "All Featured",
+            style: TextStyle(fontFamily: "Montserrat-SemiBold", fontSize: 18),
           ),
-          child: InkWell(
-            onTap: () {},
-            child: Row(
-              children: [
-                Text(
-                  "Sort",
-                  style: TextStyle(
-                    fontFamily: "Montserrat-Regular",
-                    fontSize: 13,
+          SizedBox(width: 102),
+          Container(
+            padding: EdgeInsets.symmetric(horizontal: 5, vertical: 2),
+            height: 24,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(5),
+              color: Color(0xFFFDFDFD),
+            ),
+            child: InkWell(
+              onTap: () {},
+              child: Row(
+                children: [
+                  Text(
+                    "Sort",
+                    style: TextStyle(
+                      fontFamily: "Montserrat-Regular",
+                      fontSize: 13,
+                    ),
                   ),
-                ),
-                Transform.rotate(
-                  angle: 90 * pi / 180,
-                  child: Icon(
-                    Icons.compare_arrows_sharp,
-                    size: 17,
-                    color: Colors.black,
+                  Transform.rotate(
+                    angle: 90 * pi / 180,
+                    child: Icon(
+                      Icons.compare_arrows_sharp,
+                      size: 17,
+                      color: Colors.black,
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
-        ),
-        SizedBox(width: 10),
+          SizedBox(width: 10),
 
-        Container(
-          padding: EdgeInsets.symmetric(horizontal: 5, vertical: 2),
-          height: 24,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(5),
-            color: Color(0xFFFDFDFD),
-          ),
-          child: InkWell(
-            onTap: () {},
-            child: Row(
-              children: [
-                Text(
-                  "Filter",
-                  style: TextStyle(
-                    fontFamily: "Montserrat-Regular",
-                    fontSize: 13,
+          Container(
+            padding: EdgeInsets.symmetric(horizontal: 5, vertical: 2),
+            height: 24,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(5),
+              color: Color(0xFFFDFDFD),
+            ),
+            child: InkWell(
+              onTap: () {},
+              child: Row(
+                children: [
+                  Text(
+                    "Filter",
+                    style: TextStyle(
+                      fontFamily: "Montserrat-Regular",
+                      fontSize: 13,
+                    ),
                   ),
-                ),
-                Icon(Icons.filter_list_alt, size: 17, color: Colors.black),
-              ],
+                  Icon(Icons.filter_list_alt, size: 17, color: Colors.black),
+                ],
+              ),
             ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 
-  TextField searchBox() {
-    return TextField(
-      decoration: InputDecoration(
-        contentPadding: EdgeInsets.symmetric(horizontal: 10),
-        prefixIcon: Icon(Icons.search),
-        suffixIcon: Icon(Icons.mic_none),
-        filled: true,
-        hintText: 'Search any Product',
-        hintStyle: TextStyle(
-          color: Color(0xFFBBBBBB),
-          fontFamily: "Montserrat-Regular",
-          fontSize: 14,
-        ),
-        fillColor: Color(0xFFFDFDFD),
-        border: OutlineInputBorder(
-          borderSide: BorderSide.none,
-          borderRadius: BorderRadius.circular(8),
+  Padding searchBox() {
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+
+      child: TextField(
+        decoration: InputDecoration(
+          contentPadding: EdgeInsets.symmetric(horizontal: 10),
+          prefixIcon: Icon(Icons.search),
+          suffixIcon: Icon(Icons.mic_none),
+          filled: true,
+          hintText: 'Search any Product',
+          hintStyle: TextStyle(
+            color: Color(0xFFBBBBBB),
+            fontFamily: "Montserrat-Regular",
+            fontSize: 14,
+          ),
+          fillColor: Color(0xFFFDFDFD),
+          border: OutlineInputBorder(
+            borderSide: BorderSide.none,
+            borderRadius: BorderRadius.circular(8),
+          ),
         ),
       ),
     );

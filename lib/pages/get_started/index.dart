@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:online_store/pages/home/index.dart';
 
 class GetStartedPage extends StatelessWidget {
+  const GetStartedPage({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -25,8 +27,8 @@ class GetStartedPage extends StatelessWidget {
                 colors: [
                   Color(0xCD000000),
                   Color(0x94000000),
-                  Color(0xF63758),
-                  Color(0xF63758),
+                  Color(0x00f63758),
+                  Color(0x00f63758),
                 ],
                 begin: FractionalOffset.bottomCenter,
                 end: FractionalOffset.topCenter,
