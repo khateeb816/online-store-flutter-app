@@ -70,7 +70,7 @@ Stack bottomBar(BuildContext context, String active) {
             InkWell(
               onTap: () => Navigator.pushReplacement(
                 context,
-                MaterialPageRoute(builder: (context) => searchProductPage()),
+                MaterialPageRoute(builder: (context) => SearchProductPage()),
               ),
               child: Column(
                 children: [

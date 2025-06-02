@@ -4,8 +4,9 @@ import 'package:online_store/pages/components/bottom_bar.dart';
 import 'package:online_store/pages/components/filter_bar.dart';
 import 'package:online_store/pages/components/product.dart';
 import 'package:online_store/pages/components/search_bar.dart';
+import 'package:online_store/pages/product_detail/index.dart';
 
-class searchProductPage extends StatelessWidget {
+class SearchProductPage extends StatelessWidget {
   final List<Map<String, dynamic>> products = [
     {
       "image": AssetImage("assets/images/product1.png"),
@@ -134,6 +135,14 @@ class searchProductPage extends StatelessWidget {
                     product['rating'] as double,
                     product['review'] as int,
                     165,
+                    () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => ProductDetailPage(),
+                        ),
+                      );
+                    },
                   );
                 },
               ),

@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:online_store/pages/components/app_bar.dart';
@@ -7,6 +5,7 @@ import 'package:online_store/pages/components/bottom_bar.dart';
 import 'package:online_store/pages/components/filter_bar.dart';
 import 'package:online_store/pages/components/product.dart';
 import 'package:online_store/pages/components/search_bar.dart';
+import 'package:online_store/pages/product_detail/index.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -16,8 +15,6 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-
-
   var categories = [
     {"image": AssetImage("assets/images/category1.png"), 'name': 'Beauty'},
     {"image": AssetImage("assets/images/category2.png"), 'name': 'Fashion'},
@@ -97,7 +94,6 @@ class _HomePageState extends State<HomePage> {
       SystemUiOverlayStyle(systemNavigationBarColor: Colors.transparent),
     );
     return Scaffold(
-
       extendBody: true,
       appBar: buildAppBar(),
       body: Stack(
@@ -153,7 +149,7 @@ class _HomePageState extends State<HomePage> {
           ),
         ],
       ),
-      bottomNavigationBar: bottomBar(context , "home"),
+      bottomNavigationBar: bottomBar(context, "home"),
     );
   }
 
@@ -268,7 +264,15 @@ class _HomePageState extends State<HomePage> {
                 trendingProducts[i]['discount'] as int,
                 null,
                 null,
-                120
+                120,
+                    () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => ProductDetailPage(),
+                    ),
+                  );
+                },
               );
             },
           ),
@@ -434,7 +438,15 @@ class _HomePageState extends State<HomePage> {
                 dealOfDay[i]['discount'] as int,
                 dealOfDay[i]['rating'] as double,
                 dealOfDay[i]['review'] as int,
-                120
+                120,
+                () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => ProductDetailPage(),
+                    ),
+                  );
+                },
               );
             },
           ),
@@ -640,20 +652,23 @@ class _HomePageState extends State<HomePage> {
           return SizedBox(
             height: 80,
             width: 70,
-            child: Column(
-              children: [
-                CircleAvatar(
-                  backgroundImage: categories[index]['image'] as AssetImage,
-                  radius: 30,
-                ),
-                Text(
-                  categories[index]['name'] as String? ?? '',
-                  style: TextStyle(
-                    fontFamily: "Montserrat-SemiBold",
-                    fontSize: 14,
+            child: InkWell(
+              onTap: () {},
+              child: Column(
+                children: [
+                  CircleAvatar(
+                    backgroundImage: categories[index]['image'] as AssetImage,
+                    radius: 30,
                   ),
-                ),
-              ],
+                  Text(
+                    categories[index]['name'] as String? ?? '',
+                    style: TextStyle(
+                      fontFamily: "Montserrat-SemiBold",
+                      fontSize: 14,
+                    ),
+                  ),
+                ],
+              ),
             ),
           );
         },
@@ -663,5 +678,4 @@ class _HomePageState extends State<HomePage> {
       ),
     );
   }
-
 }
