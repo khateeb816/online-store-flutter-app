@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:online_store/pages/components/app_bar.dart';
@@ -14,7 +15,104 @@ class HomePage extends StatefulWidget {
   State<HomePage> createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin {
+  // PageController for deals carousel
+  late PageController _dealsPageController;
+  int _currentDealPage = 0;
+  Timer? _autoScrollTimer;
+  
+  // ScrollControllers for Deal of the Day and Trending Products
+  final ScrollController _dealOfDayController = ScrollController();
+  final ScrollController _trendingProductsController = ScrollController();
+  
+  // Track scroll positions to show/hide navigation buttons
+  bool _showDealOfDayBackButton = false;
+  bool _showDealOfDayForwardButton = true;
+  bool _showTrendingBackButton = false;
+  bool _showTrendingForwardButton = true;
+
+  @override
+  void initState() {
+    super.initState();
+    _dealsPageController = PageController(initialPage: 0);
+    _dealsPageController.addListener(_onDealPageChanged);
+    
+    // Add listeners for scroll position changes
+    _dealOfDayController.addListener(_updateDealOfDayButtonsVisibility);
+    _trendingProductsController.addListener(_updateTrendingButtonsVisibility);
+    
+    // Start auto-scrolling timer
+    _startAutoScroll();
+  }
+
+  @override
+  void dispose() {
+    _autoScrollTimer?.cancel();
+    _dealsPageController.removeListener(_onDealPageChanged);
+    _dealOfDayController.removeListener(_updateDealOfDayButtonsVisibility);
+    _trendingProductsController.removeListener(_updateTrendingButtonsVisibility);
+    _dealsPageController.dispose();
+    _dealOfDayController.dispose();
+    _trendingProductsController.dispose();
+    super.dispose();
+  }
+  
+  void _updateDealOfDayButtonsVisibility() {
+    if (!_dealOfDayController.hasClients) return;
+    
+    setState(() {
+      // Show back button if scrolled away from start
+      _showDealOfDayBackButton = _dealOfDayController.offset > 10;
+      
+      // Hide forward button if at or near the end
+      _showDealOfDayForwardButton = _dealOfDayController.position.maxScrollExtent - 
+          _dealOfDayController.offset > 50;
+    });
+  }
+  
+  void _updateTrendingButtonsVisibility() {
+    if (!_trendingProductsController.hasClients) return;
+    
+    setState(() {
+      // Show back button if scrolled away from start
+      _showTrendingBackButton = _trendingProductsController.offset > 10;
+      
+      // Hide forward button if at or near the end
+      _showTrendingForwardButton = _trendingProductsController.position.maxScrollExtent - 
+          _trendingProductsController.offset > 50;
+    });
+  }
+
+  void _startAutoScroll() {
+    // Auto-scroll every 2 seconds
+    _autoScrollTimer = Timer.periodic(Duration(seconds: 2), (timer) {
+      if (_dealsPageController.hasClients) {
+        if (_currentDealPage < deals.length - 1) {
+          _dealsPageController.nextPage(
+            duration: Duration(milliseconds: 500),
+            curve: Curves.fastOutSlowIn,
+          );
+        } else {
+          // When reaching the end, go back to the first page
+          _dealsPageController.animateToPage(
+            0,
+            duration: Duration(milliseconds: 500),
+            curve: Curves.fastOutSlowIn,
+          );
+        }
+      }
+    });
+  }
+
+  void _onDealPageChanged() {
+    int page = _dealsPageController.page?.round() ?? 0;
+    if (page != _currentDealPage) {
+      setState(() {
+        _currentDealPage = page;
+      });
+    }
+  }
+
   var categories = [
     {"image": AssetImage("assets/images/category1.png"), 'name': 'Beauty'},
     {"image": AssetImage("assets/images/category2.png"), 'name': 'Fashion'},
@@ -121,6 +219,7 @@ class _HomePageState extends State<HomePage> {
 
                 //Deals
                 dealsSection(),
+                SizedBox(height: 15),
 
                 //Navigation Dots
                 dealsNavigationDotsSection(),
@@ -156,11 +255,19 @@ class _HomePageState extends State<HomePage> {
   Row dealsNavigationDotsSection() {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Icon(Icons.circle, color: Color(0xFFDDDADA), size: 15),
-        Icon(Icons.circle, color: Color(0xFFFDA2B2), size: 15),
-        Icon(Icons.circle, color: Color(0xFFDDDADA), size: 15),
-      ],
+      children: List.generate(
+        deals.length,
+        (index) => Container(
+          margin: EdgeInsets.symmetric(horizontal: 4),
+          child: Icon(
+            Icons.circle,
+            color: _currentDealPage == index
+                ? Color(0xFFFDA2B2)
+                : Color(0xFFDDDADA),
+            size: 12,
+          ),
+        ),
+      ),
     );
   }
 
@@ -248,6 +355,7 @@ class _HomePageState extends State<HomePage> {
         SizedBox(
           height: 235,
           child: ListView.separated(
+            controller: _trendingProductsController,
             padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
             separatorBuilder: (c, i) {
               return SizedBox(width: 10);
@@ -265,7 +373,7 @@ class _HomePageState extends State<HomePage> {
                 null,
                 null,
                 120,
-                    () {
+                () {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
@@ -277,12 +385,23 @@ class _HomePageState extends State<HomePage> {
             },
           ),
         ),
-        if (trendingProducts.length > 2)
+        if (trendingProducts.length > 2 && _showTrendingForwardButton)
           Positioned(
             top: screenHeight * 0.10, // 15% from top
             left: screenWidth * 0.83, // 80% from left
             child: InkWell(
-              onTap: () {},
+              onTap: () {
+                // Scroll to next item
+                if (_trendingProductsController.hasClients) {
+                  final double currentOffset = _trendingProductsController.offset;
+                  final double nextOffset = currentOffset + 220.0; // Approximate item width + spacing
+                  _trendingProductsController.animateTo(
+                    nextOffset,
+                    duration: Duration(milliseconds: 500),
+                    curve: Curves.fastOutSlowIn,
+                  );
+                }
+              },
               child: Container(
                 height: 50,
                 width: 50,
@@ -292,6 +411,38 @@ class _HomePageState extends State<HomePage> {
                 ),
                 child: Icon(
                   Icons.arrow_forward_ios,
+                  size: 20,
+                  color: Colors.black,
+                ),
+              ),
+            ),
+          ),
+        if (trendingProducts.length > 2 && _showTrendingBackButton)
+          Positioned(
+            top: screenHeight * 0.10, // 15% from top
+            left: screenWidth * 0.05, // 5% from left
+            child: InkWell(
+              onTap: () {
+                // Scroll to next item
+                if (_trendingProductsController.hasClients) {
+                  final double currentOffset = _trendingProductsController.offset;
+                  final double nextOffset = currentOffset - 220.0; // Approximate item width + spacing
+                  _trendingProductsController.animateTo(
+                    nextOffset,
+                    duration: Duration(milliseconds: 500),
+                    curve: Curves.fastOutSlowIn,
+                  );
+                }
+              },
+              child: Container(
+                height: 50,
+                width: 50,
+                decoration: BoxDecoration(
+                  color: Color(0xFFBABABA),
+                  borderRadius: BorderRadius.circular(25),
+                ),
+                child: Icon(
+                  Icons.arrow_back_ios_new_rounded,
                   size: 20,
                   color: Colors.black,
                 ),
@@ -422,6 +573,7 @@ class _HomePageState extends State<HomePage> {
         SizedBox(
           height: 280,
           child: ListView.separated(
+            controller: _dealOfDayController,
             padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
             separatorBuilder: (c, i) {
               return SizedBox(width: 10);
@@ -451,12 +603,23 @@ class _HomePageState extends State<HomePage> {
             },
           ),
         ),
-        if (dealOfDay.length > 2)
+        if (dealOfDay.length > 2 && _showDealOfDayForwardButton)
           Positioned(
             top: screenHeight * 0.12, // 15% from top
             left: screenWidth * 0.83, // 80% from left
             child: InkWell(
-              onTap: () {},
+              onTap: () {
+                // Scroll to next item
+                if (_dealOfDayController.hasClients) {
+                  final double currentOffset = _dealOfDayController.offset;
+                  final double nextOffset = currentOffset + 220.0; // Approximate item width + spacing
+                  _dealOfDayController.animateTo(
+                    nextOffset,
+                    duration: Duration(milliseconds: 500),
+                    curve: Curves.fastOutSlowIn,
+                  );
+                }
+              },
               child: Container(
                 height: 50,
                 width: 50,
@@ -472,6 +635,39 @@ class _HomePageState extends State<HomePage> {
               ),
             ),
           ),
+        if (dealOfDay.length > 2 && _showDealOfDayBackButton)
+          Positioned(
+            top: screenHeight * 0.12, // 15% from top
+            left: screenWidth * 0.05, // 80% from left
+            child: InkWell(
+              onTap: () {
+                // Scroll to next item
+                if (_dealOfDayController.hasClients) {
+                  final double currentOffset = _dealOfDayController.offset;
+                  final double nextOffset = currentOffset - 220.0; // Approximate item width + spacing
+                  _dealOfDayController.animateTo(
+                    nextOffset,
+                    duration: Duration(milliseconds: 500),
+                    curve: Curves.fastOutSlowIn,
+                  );
+                }
+              },
+              child: Container(
+                height: 50,
+                width: 50,
+                decoration: BoxDecoration(
+                  color: Color(0xFFBABABA),
+                  borderRadius: BorderRadius.circular(25),
+                ),
+                child: Icon(
+                  Icons.arrow_back_ios_new_rounded,
+                  size: 20,
+                  color: Colors.black,
+                ),
+              ),
+            ),
+          ),
+
       ],
     );
   }
@@ -551,22 +747,27 @@ class _HomePageState extends State<HomePage> {
 
   SizedBox dealsSection() {
     return SizedBox(
-      height: 180,
-      child: ListView.builder(
+      height: 200,
+      child: PageView.builder(
+        controller: _dealsPageController,
         itemCount: deals.length,
-        scrollDirection: Axis.horizontal,
+        physics: const BouncingScrollPhysics(),
+        pageSnapping: true,
         itemBuilder: (context, i) {
           return Container(
             margin: EdgeInsets.symmetric(horizontal: 10),
             decoration: BoxDecoration(borderRadius: BorderRadius.circular(10)),
-            width: 300,
+            width: double.infinity,
             child: Stack(
               children: [
                 SizedBox(
                   width: double.infinity,
-                  child: Image(
-                    image: deals[i]['image'] as AssetImage,
-                    fit: BoxFit.fill,
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(10),
+                    child: Image(
+                      image: deals[i]['image'] as AssetImage,
+                      fit: BoxFit.fill,
+                    ),
                   ),
                 ),
                 Padding(

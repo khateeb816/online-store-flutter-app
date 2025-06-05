@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:online_store/pages/cart/index.dart';
 import 'package:online_store/pages/home/index.dart';
 import 'package:online_store/pages/search_product/index.dart';
+import 'package:online_store/pages/settings/index.dart';
+import 'package:online_store/pages/wishlist/index.dart';
 
 Stack bottomBar(BuildContext context, String active) {
   return Stack(
@@ -45,7 +48,7 @@ Stack bottomBar(BuildContext context, String active) {
             InkWell(
               onTap: () => Navigator.pushReplacement(
                 context,
-                MaterialPageRoute(builder: (context) => HomePage()),
+                MaterialPageRoute(builder: (context) => WishlistPage()),
               ),
               child: Column(
                 children: [
@@ -94,7 +97,7 @@ Stack bottomBar(BuildContext context, String active) {
             InkWell(
               onTap: () => Navigator.pushReplacement(
                 context,
-                MaterialPageRoute(builder: (context) => HomePage()),
+                MaterialPageRoute(builder: (context) => SettingPage()),
               ),
               child: Column(
                 children: [
@@ -120,21 +123,32 @@ Stack bottomBar(BuildContext context, String active) {
       Positioned(
         top: -10,
         left: MediaQuery.of(context).size.width / 2 - 30,
-        child: Container(
-          height: 60,
-          width: 60,
-          decoration: BoxDecoration(
-            color: Color(0xFFFDFDFD),
-            borderRadius: BorderRadius.circular(50),
-            boxShadow: [
-              BoxShadow(
-                color: Color(0xFFE1E1E1),
-                blurRadius: 10,
-                offset: Offset(0, 5),
-              ),
-            ],
+        child: InkWell(
+          onTap: () {
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(builder: (context) => CartPage()),
+            );
+          },
+          child: Container(
+            height: 60,
+            width: 60,
+            decoration: BoxDecoration(
+              color: Color(0xFFFDFDFD),
+              borderRadius: BorderRadius.circular(50),
+              boxShadow: [
+                BoxShadow(
+                  color: Color(0xFFE1E1E1),
+                  blurRadius: 10,
+                  offset: Offset(0, 5),
+                ),
+              ],
+            ),
+            child: Icon(
+              FontAwesomeIcons.cartShopping,
+              color: active == 'cart' ? Colors.red : Colors.black,
+            ),
           ),
-          child: Icon(FontAwesomeIcons.cartShopping),
         ),
       ),
     ],
